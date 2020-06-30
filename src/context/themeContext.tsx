@@ -2,20 +2,23 @@ import React, { useEffect } from 'react';
 
 export interface Theme {
     backgroundColour: string;
+    hoverBackgroundColor: string;
     dataContainerBackgroundColour: string;
     primaryTextColor: string;
     secondaryTextColor: string;
 }
 
 let lightTheme: Theme = {
-    backgroundColour: '#FFFFFF',
-    dataContainerBackgroundColour: '#F0F2FA',
+    backgroundColour: '#FFFFF',
+    hoverBackgroundColor: '#F0F2FA',
+    dataContainerBackgroundColour: '#F5F7FF',
     primaryTextColor: 'black',
-    secondaryTextColor: 'gray'
+    secondaryTextColor: 'gray',
 }
 
 let darkTheme: Theme = {
     backgroundColour: '#1E202A',
+    hoverBackgroundColor: '#F0F2FA',
     dataContainerBackgroundColour: '#252A41',
     primaryTextColor: 'white',
     secondaryTextColor: '#8B97C6'
@@ -50,14 +53,7 @@ interface ThemeProviderProps {
 
 export function ThemeProvider(props: ThemeProviderProps) {
 
-    const [state, dispatch] = React.useReducer(themeReducer, {} as Theme);
-
-    useEffect(() => {
-        dispatch({
-            type: 'set theme',
-            payload: lightTheme
-        })
-    }, [])
+    const [state, dispatch] = React.useReducer(themeReducer, lightTheme);
 
     return (
         <ThemeStateContext.Provider value={state}>

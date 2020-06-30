@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { makeStyles, Box, Typography, Grid, IconButton } from '@material-ui/core';
+import { makeStyles, Box, Typography, Grid, IconButton, Theme, createStyles } from '@material-ui/core';
 import PrimaryDataContainer from './primaryDataContainer';
 import SecondaryDataContainer from './secondaryDataContainer'
 import styled from 'styled-components';
 import { useThemeState, useThemeDispatch } from '../context/themeContext';
 
 const useStyles = makeStyles({
+
     root: {
         justifyContent: 'center',
-        padding: '56px 250px',
+        display: 'flex'
     },
     rootTop: {
         marginLeft: 70,
@@ -24,12 +25,12 @@ const useStyles = makeStyles({
     rootMiddle: {
         display: 'flex',
         justifyContent: 'center',
-        marginBottom: 70
+        marginBottom: 70,
+        marginLeft: 23
     },
     rootBottom: {
         marginLeft: 70
     },
-
     toggleContainer: {
         display: 'flex',
         justifyContent: 'flex-end',
@@ -70,13 +71,12 @@ const useStyles = makeStyles({
     secondaryDataContainerRow: {
         marginBottom: 16
     }
-
 })
 
 const Background = styled('div') <{ backgroundColour: string }>`
-    justify-content: center;
     padding: 56px 250px;
     background-color: ${props => props.backgroundColour};
+    height: 100vh
 `;
 
 const DashBoardTitle = styled('p') <{ textColor: string }>`
@@ -92,6 +92,7 @@ const TotalFollowersText = styled('p') <{ textColor: string }>`
     font-family: Inter;
     font-weight: 700;
     font-size: 14px;
+    margin: 0px;
 `;
 
 const OverviewText = styled('p') <{ textColor: string }>`
@@ -130,140 +131,144 @@ export default function Dashboard() {
     }
 
     return (
-        <Background backgroundColour={theme.backgroundColour}>
-            <div className={classes.rootTop}>
-                <div className={classes.rootTopLeft}>
-                    <DashBoardTitle textColor={theme.primaryTextColor}>Social Media Dashboard</DashBoardTitle>
-                    <TotalFollowersText textColor={theme.secondaryTextColor} >Total followers: 23,004</TotalFollowersText>
-                </div>
-                <div className={classes.rootTopRight}>
-                    <Box className={classes.toggleContainer}>
-                        <Typography className={classes.darkModeText}>Dark Mode</Typography>
-                        <div className={darkMode ? classes.toggleBackgroundDarkMode : classes.toggleBackground}>
-                            <IconButton onClick={() => toggleTheme()} size='small'>
-                                <div className={classes.toggleCircle} />
-                            </IconButton>
+        <Box className={classes.root}>
+            <Background backgroundColour={theme.backgroundColour}>
+                <Box>
+                    <div className={classes.rootTop}>
+                        <div className={classes.rootTopLeft}>
+                            <DashBoardTitle textColor={theme.primaryTextColor}>Social Media Dashboard</DashBoardTitle>
+                            <TotalFollowersText textColor={theme.secondaryTextColor} >Total followers: 23,004</TotalFollowersText>
                         </div>
-                    </Box>
-                </div>
-            </div>
-            <div className={classes.rootMiddle}>
-                <PrimaryDataContainer
-                    borderTopColor='#198FF5'
-                    dataNumber={'1987'}
-                    dataUnit={'FOLLOWERS'}
-                    accountIcon='Facebook'
-                    userAccount='@nathanf'
-                    changeType='Gain'
-                    changeAmount={12}
-                />
-                <PrimaryDataContainer
-                    borderTopColor='#1CA0F2'
-                    dataNumber={'1044'}
-                    dataUnit={'FOLLOWERS'}
-                    accountIcon='Twitter'
-                    userAccount='@nathanf'
-                    changeType='Gain'
-                    changeAmount={99}
-                />
-                <PrimaryDataContainer
-                    borderTopColor='#C4032A'
-                    dataNumber={'11k'}
-                    dataUnit={'FOLLOWERS'}
-                    accountIcon='Instagram'
-                    userAccount='@realnathanf'
-                    changeType='Gain'
-                    changeAmount={1099}
-                />
-                <PrimaryDataContainer
-                    borderTopColor='#C4032A'
-                    dataNumber={'8239'}
-                    dataUnit={'SUBSCRIBERS'}
-                    accountIcon='Youtube'
-                    userAccount='Nathan F.'
-                    changeType='Loss'
-                    changeAmount={144}
-                />
-            </div>
-            <div className={classes.rootBottom}>
-                <OverviewText textColor={theme.primaryTextColor}>Overview - Today</OverviewText>
-                <Grid className={classes.secondaryDataContainerRow} container spacing={3}>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Page Views'
-                            dataNumber={'87'}
+                        <div className={classes.rootTopRight}>
+                            <Box className={classes.toggleContainer}>
+                                <Typography className={classes.darkModeText}>Dark Mode</Typography>
+                                <div className={darkMode ? classes.toggleBackgroundDarkMode : classes.toggleBackground}>
+                                    <IconButton onClick={() => toggleTheme()} size='small'>
+                                        <div className={classes.toggleCircle} />
+                                    </IconButton>
+                                </div>
+                            </Box>
+                        </div>
+                    </div>
+                    <div className={classes.rootMiddle}>
+                        <PrimaryDataContainer
+                            borderTopColor='#198FF5'
+                            dataNumber={'1987'}
+                            dataUnit={'FOLLOWERS'}
                             accountIcon='Facebook'
+                            userAccount='@shecodes'
                             changeType='Gain'
-                            changePercentage={3}
+                            changeAmount={12}
                         />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Likes'
-                            dataNumber={'52'}
-                            accountIcon='Facebook'
-                            changeType='Loss'
-                            changePercentage={2}
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Likes'
-                            dataNumber={'542'}
-                            accountIcon='Instagram'
-                            changeType='Gain'
-                            changePercentage={2257}
-                        />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Profile Views'
-                            dataNumber={'52k'}
-                            accountIcon='Instagram'
-                            changeType='Gain'
-                            changePercentage={1375}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={3}>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Retweets'
-                            dataNumber={'117'}
+                        <PrimaryDataContainer
+                            borderTopColor='#1CA0F2'
+                            dataNumber={'1044'}
+                            dataUnit={'FOLLOWERS'}
                             accountIcon='Twitter'
+                            userAccount='@shecodes'
                             changeType='Gain'
-                            changePercentage={303}
+                            changeAmount={99}
                         />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Likes'
-                            dataNumber={'507'}
-                            accountIcon='Twitter'
+                        <PrimaryDataContainer
+                            borderTopColorGradient={{ colourOne: '#fdc468', colourTwo: '#df4996' }}
+                            dataNumber={'11k'}
+                            dataUnit={'FOLLOWERS'}
+                            accountIcon='Instagram'
+                            userAccount='@shecodes'
                             changeType='Gain'
-                            changePercentage={553}
+                            changeAmount={1099}
                         />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Likes'
-                            dataNumber={'107'}
+                        <PrimaryDataContainer
+                            borderTopColor='#C4032A'
+                            dataNumber={'8239'}
+                            dataUnit={'SUBSCRIBERS'}
                             accountIcon='Youtube'
+                            userAccount='SheCodes'
                             changeType='Loss'
-                            changePercentage={19}
+                            changeAmount={144}
                         />
-                    </Grid>
-                    <Grid item xs={3}>
-                        <SecondaryDataContainer
-                            title='Total views'
-                            dataNumber={'1407'}
-                            accountIcon='Youtube'
-                            changeType='Loss'
-                            changePercentage={12}
-                        />
-                    </Grid>
-                </Grid>
-            </div>
-        </Background>
+                    </div>
+                    <div className={classes.rootBottom}>
+                        <OverviewText textColor={!darkMode ? theme.primaryTextColor : theme.secondaryTextColor}>Overview - Today</OverviewText>
+                        <Grid className={classes.secondaryDataContainerRow} container spacing={3}>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Page Views'
+                                    dataNumber={'87'}
+                                    accountIcon='Facebook'
+                                    changeType='Gain'
+                                    changePercentage={3}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Likes'
+                                    dataNumber={'52'}
+                                    accountIcon='Facebook'
+                                    changeType='Loss'
+                                    changePercentage={2}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Likes'
+                                    dataNumber={'542'}
+                                    accountIcon='Instagram'
+                                    changeType='Gain'
+                                    changePercentage={2257}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Profile Views'
+                                    dataNumber={'52k'}
+                                    accountIcon='Instagram'
+                                    changeType='Gain'
+                                    changePercentage={1375}
+                                />
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={3}>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Retweets'
+                                    dataNumber={'117'}
+                                    accountIcon='Twitter'
+                                    changeType='Gain'
+                                    changePercentage={303}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Likes'
+                                    dataNumber={'507'}
+                                    accountIcon='Twitter'
+                                    changeType='Gain'
+                                    changePercentage={553}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Likes'
+                                    dataNumber={'107'}
+                                    accountIcon='Youtube'
+                                    changeType='Loss'
+                                    changePercentage={19}
+                                />
+                            </Grid>
+                            <Grid item xs={3}>
+                                <SecondaryDataContainer
+                                    title='Total views'
+                                    dataNumber={'1407'}
+                                    accountIcon='Youtube'
+                                    changeType='Loss'
+                                    changePercentage={12}
+                                />
+                            </Grid>
+                        </Grid>
+                    </div>
+                </Box>
+            </Background>
+        </Box>
     );
 }

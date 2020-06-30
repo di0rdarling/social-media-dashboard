@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, makeStyles } from '@material-ui/core';
+import { Typography, makeStyles, Box } from '@material-ui/core';
 import styled from 'styled-components';
 import { useThemeState } from '../context/themeContext';
 
@@ -25,7 +25,6 @@ const useStyles = makeStyles({
         letterSpacing: 4,
         fontSize: 14,
         color: 'gray',
-        fontWeight: 700
     },
     icon: {
         marginRight: 8
@@ -39,12 +38,22 @@ const useStyles = makeStyles({
         marginTop: 25,
         marginRight: 8
     },
+    gradientBorder: {
+        border: '2px solid',
+        position: 'relative',
+        top: 37,
+        width: 244,
+        left: 32,
+        borderRadius: 5
+    }
 })
 
 interface DataContainerStyledProps {
     borderTopColor?: string;
+    borderTopColorTwo?: string;
     changeType?: 'Loss' | 'Gain'
     backgroundColor?: string;
+    backgroundHoverColor?: string;
     primaryTextColor?: string;
     secondaryTextColor?: string;
 }
@@ -55,9 +64,13 @@ const Wrapper = styled("div") <DataContainerStyledProps>`
     background-color: ${props => props.backgroundColor};
     text-align: center;
     padding: 32px 0px 16px 0px;
-    margin: 32px 0px 0px 32px;
+    margin: ${props => props.borderTopColorTwo && '26px 0px 0px 32px'};     
+    margin: ${props => !props.borderTopColorTwo && '32px 0px 0px 32px'};     
     border-top: solid thick ${props => props.borderTopColor};
-    border-radius: 5px
+    border-radius: 5px;
+    &:hover {
+        background-color: ${props => props.backgroundHoverColor};
+    }
 `;
 
 const ChangeText = styled('p') <DataContainerStyledProps>`
@@ -84,8 +97,18 @@ const UserAccountText = styled('p') <DataContainerStyledProps>`
     margin: 3px 0px 0px 0px;
 `;
 
+const GradientBorder = styled("div") <DataContainerStyledProps>`
+    background: linear-gradient(90deg, ${props => props.borderTopColor} 0%, ${props => props.borderTopColorTwo} 100%);
+    position: relative;
+    width: 251px;
+    height: 5px;
+    border-radius: 10px;
+    bottom: 37px;
+`;
+
 interface PrimaryDataContainerProps {
-    borderTopColor: string,
+    borderTopColor?: string,
+    borderTopColorGradient?: { colourOne: string; colourTwo: string }
     dataNumber: string,
     dataUnit: string,
     accountIcon: 'Facebook' | 'Twitter' | 'Youtube' | 'Instagram',
@@ -98,7 +121,7 @@ interface PrimaryDataContainerProps {
 export default function PrimaryDataContainer(props: PrimaryDataContainerProps) {
 
     let classes = useStyles();
-    let { dataNumber, dataUnit, borderTopColor, accountIcon, userAccount, changeType, changeAmount } = props;
+    let { dataNumber, dataUnit, borderTopColor, accountIcon, userAccount, changeType, changeAmount, borderTopColorGradient } = props;
     let theme = useThemeState();
 
     const getIcon = (): React.ReactElement => {
@@ -129,19 +152,26 @@ export default function PrimaryDataContainer(props: PrimaryDataContainerProps) {
 
 
     return (
-        <Wrapper borderTopColor={borderTopColor} backgroundColor={theme.dataContainerBackgroundColour}>
-            <div className={classes.rootTop}>
-                {getIcon()}
-                <UserAccountText secondaryTextColor={theme.secondaryTextColor} >{userAccount}</UserAccountText>
-            </div>
-            <div className={classes.rootMiddle}>
-                <NumberLargeText primaryTextColor={theme.primaryTextColor}>{dataNumber}</NumberLargeText>
-                <Typography className={classes.dataUnitText}>{dataUnit}</Typography>
-            </div>
-            <div className={classes.rootBottom}>
-                <svg className={changeType === 'Loss' ? classes.gainIcon : classes.lossIcon} xmlns="http://www.w3.org/2000/svg" width="8" height="4"><path fill={changeType === 'Gain' ? '#1DB489' : '#DC414C'} fill-rule="evenodd" d="M0 4l4-4 4 4z" /></svg>
-                <ChangeText changeType={changeType}>{changeAmount} Today</ChangeText>
-            </div>
-        </Wrapper>
+        <div>
+            <Wrapper
+                borderTopColor={borderTopColor}
+                backgroundColor={theme.dataContainerBackgroundColour}
+                borderTopColorTwo={theme.hoverBackgroundColor}
+            >
+                {borderTopColorGradient && <GradientBorder borderTopColor={borderTopColorGradient.colourOne} borderTopColorTwo={borderTopColorGradient.colourTwo} />}
+                <div className={classes.rootTop}>
+                    {getIcon()}
+                    <UserAccountText secondaryTextColor={theme.secondaryTextColor} >{userAccount}</UserAccountText>
+                </div>
+                <div className={classes.rootMiddle}>
+                    <NumberLargeText primaryTextColor={theme.primaryTextColor}>{dataNumber}</NumberLargeText>
+                    <Typography className={classes.dataUnitText}>{dataUnit}</Typography>
+                </div>
+                <div className={classes.rootBottom}>
+                    <svg className={changeType === 'Loss' ? classes.gainIcon : classes.lossIcon} xmlns="http://www.w3.org/2000/svg" width="8" height="4"><path fill={changeType === 'Gain' ? '#1DB489' : '#DC414C'} fill-rule="evenodd" d="M0 4l4-4 4 4z" /></svg>
+                    <ChangeText changeType={changeType}>{changeAmount} Today</ChangeText>
+                </div>
+            </Wrapper>
+        </div>
     )
 }

@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     rootBottom: {
         display: 'flex',
         justifyContent: 'space-between',
-        marginTop: 16
+        marginTop: 20
     },
     rootBottomLeft: {
         display: 'flex',
@@ -62,7 +62,7 @@ const NumberLargeText = styled('p') <DataContainerStyledProps>`
     color: ${props => props.primaryTextColor};
     font-family: Inter;
     font-weight: 700;
-    font-size: 40px;
+    font-size: 32px;
     margin: 0px
 `;
 

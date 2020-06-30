@@ -1,16 +1,11 @@
 
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles, getThemeProps } from '@material-ui/styles';
 import styled from 'styled-components';
+import { useThemeState } from '../context/themeContext';
 
 const useStyles = makeStyles({
-    root: {
-        padding: 32,
-        backgroundColor: '#F0F2FA',
-        borderRadius: 5,
-        width: 200
-    },
     rootTop: {
         display: 'flex',
         justifyContent: 'space-between'
@@ -21,18 +16,19 @@ const useStyles = makeStyles({
         marginTop: 16
     },
     rootBottomLeft: {
-        display: 'flex'
+        display: 'flex',
+        marginTop: 5
     },
     icon: {
+        margin: '5px 0px'
+    },
+    gainIcon: {
+        marginTop: 21,
         marginRight: 8
     },
     lossIcon: {
-        marginTop: 25,
-        marginRight: 8
-    },
-    gainIcon: {
         transform: 'rotateX(180deg)',
-        marginTop: 25,
+        marginTop: 21,
         marginRight: 8
     },
     titleText: {
@@ -49,18 +45,45 @@ const useStyles = makeStyles({
 
 interface DataContainerStyledProps {
     borderTopColor?: string;
-    changeType?: 'Loss' | 'Gain'
+    changeType?: 'Loss' | 'Gain';
+    backgroundColour?: string;
+    primaryTextColor?: string;
+    secondaryTextColor?: string
 }
 
 const ChangeText = styled('p') <DataContainerStyledProps>`
     color: ${props => props.changeType === 'Gain' ? `#1DB489` : `#DC414C`};
     font-family: Inter;
     font-weight: 700;
+    font-size: 14px;
+`;
+
+const NumberLargeText = styled('p') <DataContainerStyledProps>`
+    color: ${props => props.primaryTextColor};
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 40px;
+    margin: 0px
+`;
+
+const Background = styled('div') <DataContainerStyledProps>`
+    padding: 16px 32px;
+    background-color: ${props => props.backgroundColour};
+    borderRadius: 5px;
+    width: 200px;
+`;
+
+const Title = styled('p') <DataContainerStyledProps>`
+    color: ${props => props.secondaryTextColor};
+    font-family: Inter;
+    font-weight: 700;
+    margin: 3px 0px 0px 0px;
+    font-size: 14px
 `;
 
 interface SecondaryDataContainerProps {
     title: string,
-    dataNumber: number,
+    dataNumber: string,
     accountIcon: 'Facebook' | 'Twitter' | 'Youtube' | 'Instagram',
     changeType: 'Loss' | 'Gain',
     changePercentage: number,
@@ -70,6 +93,7 @@ export default function SecondaryDataContainer(props: SecondaryDataContainerProp
 
     let classes = useStyles();
     let { title, dataNumber, accountIcon, changePercentage, changeType } = props;
+    let theme = useThemeState();
 
     const getIcon = (): React.ReactElement => {
 
@@ -98,18 +122,18 @@ export default function SecondaryDataContainer(props: SecondaryDataContainerProp
     }
 
     return (
-        <div className={classes.root}>
+        <Background backgroundColour={theme.dataContainerBackgroundColour}>
             <div className={classes.rootTop}>
-                <Typography className={classes.titleText}>{title}</Typography>
+                <Title secondaryTextColor={theme.secondaryTextColor}>{title}</Title>
                 {getIcon()}
             </div>
             <div className={classes.rootBottom}>
-                <Typography className={classes.dataNumber}>{dataNumber}</Typography>
+                <NumberLargeText primaryTextColor={theme.primaryTextColor}>{dataNumber}</NumberLargeText>
                 <div className={classes.rootBottomLeft}>
-                    <svg className={changeType === 'Loss' ? classes.gainIcon : classes.lossIcon} xmlns="http://www.w3.org/2000/svg" width="8" height="4"><path fill={changeType === 'Gain' ? '#1DB489' : '#DC414C'} fill-rule="evenodd" d="M0 4l4-4 4 4z" /></svg>
+                    <svg className={changeType === 'Loss' ? classes.lossIcon : classes.gainIcon} xmlns="http://www.w3.org/2000/svg" width="8" height="4"><path fill={changeType === 'Gain' ? '#1DB489' : '#DC414C'} fill-rule="evenodd" d="M0 4l4-4 4 4z" /></svg>
                     <ChangeText changeType={changeType}>{changePercentage}%</ChangeText>
                 </div>
             </div>
-        </div>
+        </Background>
     )
 }

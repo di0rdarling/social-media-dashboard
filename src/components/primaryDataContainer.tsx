@@ -1,17 +1,9 @@
 import React from 'react';
-import { Typography, makeStyles, Box } from '@material-ui/core';
+import { Typography, makeStyles } from '@material-ui/core';
 import styled from 'styled-components';
+import { useThemeState } from '../context/themeContext';
 
 const useStyles = makeStyles({
-    root: {
-        width: 250,
-        height: 200,
-        backgroundColor: '#F0F2FA',
-        textAlign: 'center',
-        padding: '16px 0px',
-        margin: '32px 0px 0px 32px',
-        borderTop: 'solid #1CA0F2'
-    },
     rootTop: {
         display: 'flex',
         justifyContent: 'center'
@@ -35,14 +27,6 @@ const useStyles = makeStyles({
         color: 'gray',
         fontWeight: 700
     },
-    userAccountText: {
-        fontFamily: 'Inter',
-        fontWeight: 700,
-        fontSize: 14,
-        color: 'grey',
-        position: 'relative',
-        bottom: 3
-    },
     icon: {
         marginRight: 8
     },
@@ -60,12 +44,15 @@ const useStyles = makeStyles({
 interface DataContainerStyledProps {
     borderTopColor?: string;
     changeType?: 'Loss' | 'Gain'
+    backgroundColor?: string;
+    primaryTextColor?: string;
+    secondaryTextColor?: string;
 }
 
 const Wrapper = styled("div") <DataContainerStyledProps>`
     width: 250px;
     height: 200px;
-    background-color: #F0F2FA;
+    background-color: ${props => props.backgroundColor};
     text-align: center;
     padding: 32px 0px 16px 0px;
     margin: 32px 0px 0px 32px;
@@ -79,9 +66,27 @@ const ChangeText = styled('p') <DataContainerStyledProps>`
     font-weight: 700
 `;
 
+const NumberLargeText = styled('p') <DataContainerStyledProps>`
+    color: ${props => props.primaryTextColor};
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 48px;
+    margin: 20px 0px 5px 0px;
+`;
+
+const UserAccountText = styled('p') <DataContainerStyledProps>`
+    color: ${props => props.secondaryTextColor};
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 14px;
+    position: relative;
+    bottom: 3px;
+    margin: 3px 0px 0px 0px;
+`;
+
 interface PrimaryDataContainerProps {
     borderTopColor: string,
-    dataNumber: number,
+    dataNumber: string,
     dataUnit: string,
     accountIcon: 'Facebook' | 'Twitter' | 'Youtube' | 'Instagram',
     userAccount: string,
@@ -94,6 +99,7 @@ export default function PrimaryDataContainer(props: PrimaryDataContainerProps) {
 
     let classes = useStyles();
     let { dataNumber, dataUnit, borderTopColor, accountIcon, userAccount, changeType, changeAmount } = props;
+    let theme = useThemeState();
 
     const getIcon = (): React.ReactElement => {
 
@@ -123,13 +129,13 @@ export default function PrimaryDataContainer(props: PrimaryDataContainerProps) {
 
 
     return (
-        <Wrapper borderTopColor={borderTopColor}>
+        <Wrapper borderTopColor={borderTopColor} backgroundColor={theme.dataContainerBackgroundColour}>
             <div className={classes.rootTop}>
                 {getIcon()}
-                <Typography className={classes.userAccountText}>{userAccount}</Typography>
+                <UserAccountText secondaryTextColor={theme.secondaryTextColor} >{userAccount}</UserAccountText>
             </div>
             <div className={classes.rootMiddle}>
-                <Typography className={classes.dataNumberLarge}>{dataNumber}</Typography>
+                <NumberLargeText primaryTextColor={theme.primaryTextColor}>{dataNumber}</NumberLargeText>
                 <Typography className={classes.dataUnitText}>{dataUnit}</Typography>
             </div>
             <div className={classes.rootBottom}>
